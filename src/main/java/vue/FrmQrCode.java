@@ -25,6 +25,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import controleur.Controle;
 import modele.TypeContenu;
 
+/**
+ * Fenêtre principale : saisie, aperçu du QR code et export PDF.
+ */
 public class FrmQrCode extends JFrame {
 
     private final Controle controle;
@@ -135,6 +138,8 @@ public class FrmQrCode extends JFrame {
     }
 
     // appelés par le contrôleur
+
+    /** Affiche l'aperçu du QR et son contenu, active l'export. */
     public void afficheQrCode(BufferedImage image, String contenu) {
         lblApercu.setText(null);
         lblApercu.setIcon(new ImageIcon(image));
@@ -142,10 +147,12 @@ public class FrmQrCode extends JFrame {
         btnExporter.setEnabled(true);
     }
 
+    /** Affiche un message d'erreur. */
     public void afficheErreur(String message) {
         JOptionPane.showMessageDialog(this, message, "Erreur", JOptionPane.ERROR_MESSAGE);
     }
 
+    /** Affiche un message de confirmation. */
     public void afficheSucces(String message) {
         JOptionPane.showMessageDialog(this, message, "Export", JOptionPane.INFORMATION_MESSAGE);
     }

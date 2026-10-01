@@ -63,6 +63,16 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.2</version>
             </plugin>
+            <!-- doc : mvn javadoc:javadoc -> target/reports/apidocs -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.11.2</version>
+                <configuration>
+                    <doclint>all,-missing</doclint>
+                    <show>private</show>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

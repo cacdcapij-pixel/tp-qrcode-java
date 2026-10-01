@@ -1,15 +1,18 @@
 # TP Java – Générateur de QR code
 
-Application Swing en MVC : saisie d'un texte ou d'un lien, génération du QR code, export en PDF.
+Application Swing en MVC : saisie d'un texte, lien, email ou numéro de téléphone, génération du QR code, export en PDF.
 
-- **modele** : `GenerateurQrCode` (ZXing), `GenerateurPdf` (iText), `QrCodeException`
+- **modele** : `TypeContenu`, `FormateurContenu`, `GenerateurQrCode` (ZXing), `GenerateurPdf` (iText), `QrCodeException`
 - **vue** : `FrmQrCode`
 - **controleur** : `Controle` (main)
 
-## Lancer
+Le fonctionnement détaillé est dans [RAPPORT.md](RAPPORT.md).
+
+## Commandes
 
 ```
-mvn test          # tests unitaires
+mvn test               # tests unitaires
+mvn javadoc:javadoc    # documentation -> target/reports/apidocs/index.html
 ```
 
-Puis exécuter `controleur.Controle` depuis l'IDE.
+Lancer l'application : exécuter `controleur.Controle` depuis l'IDE.

@@ -1,6 +1,8 @@
 package modele;
 
-// erreur métier renvoyée au contrôleur
+/**
+ * Erreur métier du modèle, attrapée par le contrôleur et affichée par la vue.
+ */
 public class QrCodeException extends Exception {
 
     public QrCodeException(String message) {

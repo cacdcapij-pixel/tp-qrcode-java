@@ -12,6 +12,9 @@ import modele.QrCodeException;
 import modele.TypeContenu;
 import vue.FrmQrCode;
 
+/**
+ * Contrôleur : reçoit les demandes de la vue, appelle le modèle et renvoie le résultat à la vue.
+ */
 public class Controle {
 
     private FrmQrCode frmQrCode;
@@ -32,7 +35,7 @@ public class Controle {
         frmQrCode.setVisible(true);
     }
 
-    // clic Générer
+    /** Clic Générer : formate la saisie, génère le QR et l'affiche. */
     public void demandeFrmQrCodeGenerer(TypeContenu type, String saisie) {
         try {
             String contenu = formateurContenu.formater(type, saisie);
@@ -44,7 +47,7 @@ public class Controle {
         }
     }
 
-    // clic Exporter
+    /** Clic Exporter : écrit le dernier QR généré dans le fichier PDF choisi. */
     public void demandeFrmQrCodeExporter(File fichier) {
         try {
             generateurPdf.exporter(imageCourante, contenuCourant, fichier);

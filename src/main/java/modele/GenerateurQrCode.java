@@ -12,11 +12,18 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
+/**
+ * Génère l'image d'un QR code avec ZXing.
+ */
 public class GenerateurQrCode {
 
+    /** Taille de l'image en pixels (carrée). */
     public static final int TAILLE = 300;
 
-    // texte -> image du QR
+    /**
+     * Transforme un texte en image de QR code.
+     * @throws QrCodeException si le texte est vide ou trop long
+     */
     public BufferedImage generer(String texte) throws QrCodeException {
         if (texte == null || texte.isBlank()) {
             throw new QrCodeException("Le texte est vide.");

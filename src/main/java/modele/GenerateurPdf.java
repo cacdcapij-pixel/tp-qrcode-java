@@ -17,9 +17,15 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.properties.HorizontalAlignment;
 import com.itextpdf.layout.properties.TextAlignment;
 
+/**
+ * Crée le fichier PDF contenant le QR code avec iText.
+ */
 public class GenerateurPdf {
 
-    // image + texte -> fichier PDF
+    /**
+     * Écrit un PDF avec un titre, le QR code et son contenu en légende.
+     * @throws QrCodeException si rien à exporter ou si le fichier ne peut pas être écrit
+     */
     public void exporter(BufferedImage image, String texte, File fichier) throws QrCodeException {
         if (image == null) {
             throw new QrCodeException("Aucun QR code à exporter.");
