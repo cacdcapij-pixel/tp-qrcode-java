@@ -3,6 +3,7 @@ package modele;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import org.junit.jupiter.api.Test;
@@ -55,5 +56,21 @@ class GenerateurQrCodeTest {
     @Test
     void texteTropLong() {
         assertThrows(QrCodeException.class, () -> generateur.generer("a".repeat(5000)));
+    }
+
+    // partie 2 : QR en couleur
+
+    @Test
+    void couleurFonceeLisible() throws Exception {
+        BufferedImage image = generateur.generer("https://exemple.fr", new Color(0, 51, 153));
+        assertEquals("https://exemple.fr", decoder(image));
+        // coin haut gauche = marge blanche
+        assertEquals(Color.WHITE.getRGB(), image.getRGB(0, 0));
+    }
+
+    @Test
+    void couleurTropClaire() {
+        assertThrows(QrCodeException.class, () -> generateur.generer("test", Color.YELLOW));
+        assertThrows(QrCodeException.class, () -> generateur.generer("test", Color.WHITE));
     }
 }
