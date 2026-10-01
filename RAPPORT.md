@@ -111,12 +111,12 @@ Les tests du PDF utilisent `@TempDir` : les fichiers sont créés dans un dossie
 | Lien `github.com/...` puis Générer | QR affiché, contenu `https://github.com/...`, export activé | ✅ |
 | Export PDF | PDF avec titre, QR centré et légende | ✅ |
 | Scan du QR du PDF | Retrouve le lien de départ | ✅ |
-| Générer avec saisie vide | Message « Le texte est vide. » | ☐ |
-| Email sans @ | Message d'erreur email | ☐ |
-| Modifier le texte après génération | Bouton Exporter désactivé | ☐ |
-| Exporter vers un PDF ouvert dans un lecteur | Message « Impossible d'écrire le PDF » | ☐ |
-| Exporter vers un fichier existant | Demande de confirmation | ☐ |
-| Scanner le QR avec un téléphone | Ouvre le lien / l'email / l'appel | ☐ |
+| Générer avec saisie vide | Message « Le texte est vide. » | ✅ |
+| Email sans @ | Message d'erreur email | ✅ |
+| Modifier le texte après génération | Bouton Exporter désactivé | ✅ |
+| Exporter vers un PDF ouvert dans un lecteur | Message « Impossible d'écrire le PDF » | ✅ |
+| Exporter vers un fichier existant | Demande de confirmation | ✅ |
+| Scanner le QR avec un téléphone | Ouvre le lien / l'email / l'appel | ✅ |
 
 ## 7. Documentation du code
 
