@@ -146,6 +146,8 @@ public class FrmQrCode extends JFrame {
         lblApercu = new JLabel("Aucun QR code", SwingConstants.CENTER);
         lblApercu.setPreferredSize(new Dimension(310, 310));
         lblContenu = new JLabel(" ", SwingConstants.CENTER);
+        // largeur fixe : un long contenu est coupé avec « … » au lieu d'élargir la fenêtre
+        lblContenu.setPreferredSize(new Dimension(310, lblContenu.getPreferredSize().height));
         JPanel pnlApercu = new JPanel(new BorderLayout());
         pnlApercu.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(10, 0, 0, 10), BorderFactory.createTitledBorder("Aperçu")));
@@ -615,6 +617,8 @@ public class FrmQrCode extends JFrame {
         lblApercu.setText(null);
         lblApercu.setIcon(new ImageIcon(image));
         lblContenu.setText(contenu);
+        // texte complet au survol
+        lblContenu.setToolTipText(contenu);
         apercuAJour = true;
         majBoutons();
     }
@@ -656,6 +660,7 @@ public class FrmQrCode extends JFrame {
         lblApercu.setIcon(null);
         lblApercu.setText("Aucun QR code");
         lblContenu.setText(" ");
+        lblContenu.setToolTipText(null);
         apercuAJour = false;
         majBoutons();
 
