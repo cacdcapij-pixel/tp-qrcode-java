@@ -53,12 +53,4 @@ class ProfilPdfTest {
         b.setCouleurQr(Color.BLUE);
         assertFalse(a.memeStyle(b));
     }
-
-    @Test
-    void copieIndependante() {
-        ProfilPdf original = new ProfilPdf();
-        ProfilPdf copie = new ProfilPdf(original);
-        copie.setCouleurQr(Color.BLUE);
-        assertEquals(Color.BLACK, original.getCouleurQr());
-    }
 }

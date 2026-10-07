@@ -353,9 +353,6 @@ public class FrmQrCode extends JFrame {
 
     // clic Exporter
     private void btnExporter_clic() {
-        if (!btnExporter.isEnabled()) {
-            return;
-        }
         File fichier = choisirFichier("Enregistrer le PDF", true, "pdf", "Fichier PDF", "qrcode.pdf");
         if (fichier != null) {
             controle.demandeFrmQrCodeExporter(lireProjet(), fichier);
@@ -425,9 +422,6 @@ public class FrmQrCode extends JFrame {
 
     // clic Supprimer le profil
     private void btnSupprimerProfil_clic() {
-        if (cboProfils.getSelectedIndex() <= 0) {
-            return;
-        }
         String nom = (String) cboProfils.getSelectedItem();
         int rep = JOptionPane.showConfirmDialog(this, "Supprimer le profil « " + nom + " » ?",
                 "Confirmation", JOptionPane.YES_NO_OPTION);

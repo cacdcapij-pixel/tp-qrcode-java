@@ -52,7 +52,7 @@ public class GestionProfils {
         if (!dossier.isDirectory() && !dossier.mkdirs()) {
             throw new QrCodeException("Impossible de créer le dossier des profils : " + dossier);
         }
-        sauvegarde.enregistrerProfil(profil, fichier(nom));
+        sauvegarde.enregistrer(profil, fichier(nom));
     }
 
     /** @throws QrCodeException si le profil n'existe pas ou est abîmé */

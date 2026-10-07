@@ -94,21 +94,13 @@ public class Controle {
                     get();
                     frmQrCode.afficheExportReussi(fichier);
                 } catch (ExecutionException e) {
-                    afficheErreurTravail(e.getCause());
+                    // erreur de l'export
+                    frmQrCode.afficheErreur(e.getCause().getMessage());
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             }
         }.execute();
-    }
-
-    // erreur levée pendant le travail en arrière-plan
-    private void afficheErreurTravail(Throwable cause) {
-        if (cause instanceof QrCodeException) {
-            frmQrCode.afficheErreur(cause.getMessage());
-        } else {
-            frmQrCode.afficheErreur("Erreur inattendue : " + cause);
-        }
     }
 
     // ---------- projets ----------
@@ -122,7 +114,7 @@ public class Controle {
     /** Menu Enregistrer : écrit le projet dans le fichier choisi. */
     public void demandeFrmQrCodeEnregistrerProjet(Projet projet, File fichier) {
         try {
-            sauvegarde.enregistrerProjet(projet, fichier);
+            sauvegarde.enregistrer(projet, fichier);
             frmQrCode.afficheProjetEnregistre(fichier);
         } catch (QrCodeException e) {
             frmQrCode.afficheErreur(e.getMessage());

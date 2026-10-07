@@ -28,23 +28,6 @@ public class ProfilPdf {
     private String couleurTexte = "#000000";
     private String couleurQr = "#000000";
 
-    /** Profil par défaut : Helvetica, noir. */
-    public ProfilPdf() {
-    }
-
-    /** Copie d'un profil. */
-    public ProfilPdf(ProfilPdf autre) {
-        nom = autre.nom;
-        police = autre.police;
-        cheminPolice = autre.cheminPolice;
-        tailleTitre = autre.tailleTitre;
-        tailleTexte = autre.tailleTexte;
-        titreGras = autre.titreGras;
-        couleurTitre = autre.couleurTitre;
-        couleurTexte = autre.couleurTexte;
-        couleurQr = autre.couleurQr;
-    }
-
     /**
      * Vérifie un profil relu depuis un fichier.
      * @throws QrCodeException si une valeur est absente ou incohérente

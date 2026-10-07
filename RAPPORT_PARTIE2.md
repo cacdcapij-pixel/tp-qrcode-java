@@ -163,7 +163,7 @@ Dans la vue : confirmation avant d'écraser un fichier ou un profil existant, av
 
 ### Tests unitaires
 
-Lancement : `mvn test` → **52 tests, tous réussis** (20 dans la partie 1).
+Lancement : `mvn test` → **51 tests, tous réussis** (20 dans la partie 1).
 
 | Classe de test | Ce qui est vérifié |
 |---|---|
@@ -172,7 +172,7 @@ Lancement : `mvn test` → **52 tests, tous réussis** (20 dans la partie 1).
 | `GenerateurPdfTest` (9) | Partie 1 + **PDF stylé relu avec iText** : on vérifie que le titre et la légende sont bien dans le texte de la page et qu'il y a 3 images (QR + 2 images ajoutées) ; image introuvable → exception **et aucun fichier créé** ; fichier qui n'est pas une image ; police personnalisée sans fichier ou introuvable ; **police Arial intégrée** et accents corrects (test ignoré si la police n'existe pas sur la machine) |
 | `SauvegardeTest` (11) | **Aller-retour** : un projet enregistré puis relu redonne les mêmes valeurs (titre, type, style, images) ; fichier lisible ; profil aller-retour ; fichier introuvable, JSON abîmé, fichier vide ; profil ouvert comme projet et inversement ; couleur ou type modifiés à la main ; dossier inexistant |
 | `GestionProfilsTest` (7) | Enregistrer, lister (tri alphabétique), charger ; remplacer un profil ; supprimer ; profil inconnu ; noms invalides (vide, `/`, `?`, trop long) ; espaces retirés autour du nom |
-| `ProfilPdfTest` (6) | Profil par défaut valide ; conversion des couleurs ; tailles hors limites ; police personnalisée sans fichier ; comparaison de styles ; copie indépendante |
+| `ProfilPdfTest` (5) | Profil par défaut valide ; conversion des couleurs ; tailles hors limites ; police personnalisée sans fichier ; comparaison de styles |
 
 ### Tests de l'application
 

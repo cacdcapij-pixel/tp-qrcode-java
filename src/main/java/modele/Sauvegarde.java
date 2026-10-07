@@ -18,9 +18,17 @@ public class Sauvegarde {
     // indenté, apostrophes non échappées : fichier lisible à la main
     private final Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-    /** @throws QrCodeException si le fichier ne peut pas être écrit */
-    public void enregistrerProjet(Projet projet, File fichier) throws QrCodeException {
-        ecrire(projet, fichier);
+    /**
+     * Enregistre un projet ou un profil en JSON.
+     * @throws QrCodeException si le fichier ne peut pas être écrit
+     */
+    public void enregistrer(Object objet, File fichier) throws QrCodeException {
+        try {
+            Files.writeString(fichier.toPath(), gson.toJson(objet), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new QrCodeException("Impossible d'enregistrer « " + fichier.getName()
+                    + " » (dossier inexistant ou protégé ?).", e);
+        }
     }
 
     /** @throws QrCodeException si le fichier est introuvable, illisible ou n'est pas un projet */
@@ -30,11 +38,6 @@ public class Sauvegarde {
         return projet;
     }
 
-    /** @throws QrCodeException si le fichier ne peut pas être écrit */
-    public void enregistrerProfil(ProfilPdf profil, File fichier) throws QrCodeException {
-        ecrire(profil, fichier);
-    }
-
     /** @throws QrCodeException si le fichier est introuvable, illisible ou n'est pas un profil */
     public ProfilPdf chargerProfil(File fichier) throws QrCodeException {
         ProfilPdf profil = lire(fichier, ProfilPdf.class);
@@ -42,24 +45,8 @@ public class Sauvegarde {
         return profil;
     }
 
-    // objet -> JSON -> fichier
-    private void ecrire(Object objet, File fichier) throws QrCodeException {
-        if (objet == null || fichier == null) {
-            throw new QrCodeException("Rien à enregistrer.");
-        }
-        try {
-            Files.writeString(fichier.toPath(), gson.toJson(objet), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new QrCodeException("Impossible d'enregistrer « " + fichier.getName()
-                    + " » (dossier inexistant ou protégé ?).", e);
-        }
-    }
-
     // fichier -> JSON -> objet
     private <T> T lire(File fichier, Class<T> classe) throws QrCodeException {
-        if (fichier == null) {
-            throw new QrCodeException("Aucun fichier choisi.");
-        }
         try {
             String json = Files.readString(fichier.toPath(), StandardCharsets.UTF_8);
             T objet = gson.fromJson(json, classe);

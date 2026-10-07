@@ -41,7 +41,7 @@ class SauvegardeTest {
     @Test
     void allerRetourProjet() throws Exception {
         File fichier = dossier.resolve("test.qrproj").toFile();
-        sauvegarde.enregistrerProjet(projetExemple(), fichier);
+        sauvegarde.enregistrer(projetExemple(), fichier);
 
         Projet relu = sauvegarde.chargerProjet(fichier);
         assertEquals("Carte de visite", relu.getTitre());
@@ -63,7 +63,7 @@ class SauvegardeTest {
     @Test
     void fichierLisible() throws Exception {
         File fichier = dossier.resolve("test.qrproj").toFile();
-        sauvegarde.enregistrerProjet(projetExemple(), fichier);
+        sauvegarde.enregistrer(projetExemple(), fichier);
         // JSON en clair, accents compris
         String json = Files.readString(fichier.toPath());
         assertTrue(json.contains("\"titre\": \"Carte de visite\""));
@@ -77,7 +77,7 @@ class SauvegardeTest {
         profil.setCouleurTitre(Color.RED);
         profil.setTailleTexte(14);
         File fichier = dossier.resolve("rouge.json").toFile();
-        sauvegarde.enregistrerProfil(profil, fichier);
+        sauvegarde.enregistrer(profil, fichier);
 
         ProfilPdf relu = sauvegarde.chargerProfil(fichier);
         assertEquals("Rouge", relu.getNom());
@@ -109,7 +109,7 @@ class SauvegardeTest {
     @Test
     void profilOuvertCommeProjet() throws Exception {
         File fichier = dossier.resolve("profil.json").toFile();
-        sauvegarde.enregistrerProfil(new ProfilPdf(), fichier);
+        sauvegarde.enregistrer(new ProfilPdf(), fichier);
         QrCodeException e = assertThrows(QrCodeException.class, () -> sauvegarde.chargerProjet(fichier));
         assertEquals("Ce fichier n'est pas un projet.", e.getMessage());
     }
@@ -117,7 +117,7 @@ class SauvegardeTest {
     @Test
     void projetOuvertCommeProfil() throws Exception {
         File fichier = dossier.resolve("projet.qrproj").toFile();
-        sauvegarde.enregistrerProjet(projetExemple(), fichier);
+        sauvegarde.enregistrer(projetExemple(), fichier);
         QrCodeException e = assertThrows(QrCodeException.class, () -> sauvegarde.chargerProfil(fichier));
         assertEquals("Ce fichier n'est pas un profil.", e.getMessage());
     }
@@ -125,7 +125,7 @@ class SauvegardeTest {
     @Test
     void valeurInvalideDansLeFichier() throws Exception {
         File fichier = dossier.resolve("bidouille.qrproj").toFile();
-        sauvegarde.enregistrerProjet(projetExemple(), fichier);
+        sauvegarde.enregistrer(projetExemple(), fichier);
         // modifié à la main : couleur fausse
         String json = Files.readString(fichier.toPath()).replace("#003399", "bleu");
         Files.writeString(fichier.toPath(), json);
@@ -135,7 +135,7 @@ class SauvegardeTest {
     @Test
     void typeInconnuDansLeFichier() throws Exception {
         File fichier = dossier.resolve("bidouille.qrproj").toFile();
-        sauvegarde.enregistrerProjet(projetExemple(), fichier);
+        sauvegarde.enregistrer(projetExemple(), fichier);
         String json = Files.readString(fichier.toPath()).replace("\"EMAIL\"", "\"FAX\"");
         Files.writeString(fichier.toPath(), json);
         assertThrows(QrCodeException.class, () -> sauvegarde.chargerProjet(fichier));
@@ -144,6 +144,6 @@ class SauvegardeTest {
     @Test
     void enregistrerDansDossierInexistant() {
         File fichier = dossier.resolve("existe/pas/test.qrproj").toFile();
-        assertThrows(QrCodeException.class, () -> sauvegarde.enregistrerProjet(projetExemple(), fichier));
+        assertThrows(QrCodeException.class, () -> sauvegarde.enregistrer(projetExemple(), fichier));
     }
 }

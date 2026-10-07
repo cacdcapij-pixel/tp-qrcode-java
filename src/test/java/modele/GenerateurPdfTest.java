@@ -37,7 +37,7 @@ class GenerateurPdfTest {
         BufferedImage image = new GenerateurQrCode().generer("https://exemple.fr");
         File fichier = dossier.resolve("test.pdf").toFile();
 
-        generateurPdf.exporter(image, "https://exemple.fr", fichier);
+        generateurPdf.exporter(new Projet(), image, "https://exemple.fr", fichier);
 
         assertTrue(fichier.exists());
         assertTrue(fichier.length() > 0);
@@ -49,14 +49,14 @@ class GenerateurPdfTest {
     @Test
     void imageNull() {
         File fichier = dossier.resolve("vide.pdf").toFile();
-        assertThrows(QrCodeException.class, () -> generateurPdf.exporter(null, "x", fichier));
+        assertThrows(QrCodeException.class, () -> generateurPdf.exporter(new Projet(), null, "x", fichier));
     }
 
     @Test
     void dossierInexistant() throws Exception {
         BufferedImage image = new GenerateurQrCode().generer("test");
         File fichier = dossier.resolve("existe/pas/test.pdf").toFile();
-        assertThrows(QrCodeException.class, () -> generateurPdf.exporter(image, "test", fichier));
+        assertThrows(QrCodeException.class, () -> generateurPdf.exporter(new Projet(), image, "test", fichier));
     }
 
     // ---------- partie 2 : style et images ----------

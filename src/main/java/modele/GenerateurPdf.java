@@ -36,14 +36,6 @@ public class GenerateurPdf {
     private static final float HAUTEUR_IMAGE_MAX = 250;
 
     /**
-     * Écrit un PDF avec le style par défaut (titre « QR code », Helvetica, noir).
-     * @throws QrCodeException si rien à exporter ou si le fichier ne peut pas être écrit
-     */
-    public void exporter(BufferedImage image, String texte, File fichier) throws QrCodeException {
-        exporter(new Projet(), image, texte, fichier);
-    }
-
-    /**
      * Écrit un PDF : titre, images du haut, QR code, contenu en légende, images du bas.
      * Le PDF est construit en mémoire puis écrit d'un coup : en cas d'erreur, aucun fichier à moitié écrit.
      * @throws QrCodeException si rien à exporter, police ou image invalide, ou fichier impossible à écrire
@@ -52,13 +44,7 @@ public class GenerateurPdf {
         if (image == null) {
             throw new QrCodeException("Aucun QR code à exporter.");
         }
-        if (fichier == null) {
-            throw new QrCodeException("Aucun fichier choisi.");
-        }
-        if (projet == null) {
-            projet = new Projet();
-        }
-        ProfilPdf profil = projet.getProfil() == null ? new ProfilPdf() : projet.getProfil();
+        ProfilPdf profil = projet.getProfil();
 
         // polices et images chargées avant de construire le PDF
         PdfFont policeTitre = creerPolice(profil, profil.isTitreGras());
@@ -100,7 +86,7 @@ public class GenerateurPdf {
             doc.add(qr);
 
             // légende
-            doc.add(new Paragraph(texte == null ? "" : texte)
+            doc.add(new Paragraph(texte)
                     .setFont(policeTexte)
                     .setFontSize(profil.getTailleTexte())
                     .setFontColor(new DeviceRgb(profil.getCouleurTexte()))
@@ -125,7 +111,7 @@ public class GenerateurPdf {
 
     // police standard ou fichier .ttf/.otf intégré au PDF
     private PdfFont creerPolice(ProfilPdf profil, boolean gras) throws QrCodeException {
-        PolicePdf police = profil.getPolice() == null ? PolicePdf.HELVETICA : profil.getPolice();
+        PolicePdf police = profil.getPolice();
         try {
             if (police != PolicePdf.PERSONNALISEE) {
                 return PdfFontFactory.createFont(police.getNomStandard(gras));
