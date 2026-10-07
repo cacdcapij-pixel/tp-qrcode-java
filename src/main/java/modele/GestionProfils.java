@@ -59,7 +59,6 @@ public class GestionProfils {
     public ProfilPdf charger(String nom) throws QrCodeException {
         nom = verifierNom(nom);
         ProfilPdf profil = sauvegarde.chargerProfil(fichier(nom));
-        // le nom affiché est celui du fichier
         profil.setNom(nom);
         return profil;
     }
@@ -76,7 +75,6 @@ public class GestionProfils {
         }
     }
 
-    // nom non vide, sans caractères interdits dans un nom de fichier Windows
     private String verifierNom(String nom) throws QrCodeException {
         if (nom == null || nom.isBlank()) {
             throw new QrCodeException("Le nom du profil est vide.");

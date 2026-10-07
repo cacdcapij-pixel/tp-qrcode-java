@@ -27,7 +27,6 @@ public enum PolicePdf {
         return gras ? grasse : normale;
     }
 
-    // affiché dans la liste déroulante
     @Override
     public String toString() {
         return libelle;

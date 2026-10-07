@@ -20,7 +20,6 @@ class SauvegardeTest {
     @TempDir
     Path dossier;
 
-    // projet avec un peu de tout
     private Projet projetExemple() {
         Projet projet = new Projet();
         projet.setTitre("Carte de visite");
@@ -64,7 +63,6 @@ class SauvegardeTest {
     void fichierLisible() throws Exception {
         File fichier = dossier.resolve("test.qrproj").toFile();
         sauvegarde.enregistrer(projetExemple(), fichier);
-        // JSON en clair, accents compris
         String json = Files.readString(fichier.toPath());
         assertTrue(json.contains("\"titre\": \"Carte de visite\""));
         assertTrue(json.contains("\"couleurQr\": \"#003399\""));
@@ -126,7 +124,6 @@ class SauvegardeTest {
     void valeurInvalideDansLeFichier() throws Exception {
         File fichier = dossier.resolve("bidouille.qrproj").toFile();
         sauvegarde.enregistrer(projetExemple(), fichier);
-        // modifié à la main : couleur fausse
         String json = Files.readString(fichier.toPath()).replace("#003399", "bleu");
         Files.writeString(fichier.toPath(), json);
         assertThrows(QrCodeException.class, () -> sauvegarde.chargerProjet(fichier));

@@ -30,9 +30,9 @@ import com.itextpdf.layout.properties.TextAlignment;
  */
 public class GenerateurPdf {
 
-    // A4 moins les marges par défaut d'iText (36 pt de chaque côté)
+    /** Largeur A4 moins les marges d'iText (36 pt de chaque côté). */
     private static final float LARGEUR_UTILE = PageSize.A4.getWidth() - 2 * 36;
-    // hauteur max d'une image ajoutée, pour garder le QR sur la page
+    /** Hauteur max d'une image, pour garder le QR sur la page. */
     private static final float HAUTEUR_IMAGE_MAX = 250;
 
     /**
@@ -46,7 +46,6 @@ public class GenerateurPdf {
         }
         ProfilPdf profil = projet.getProfil();
 
-        // polices et images chargées avant de construire le PDF
         PdfFont policeTitre = creerPolice(profil, profil.isTitreGras());
         PdfFont policeTexte = creerPolice(profil, false);
         List<Image> imagesHaut = new ArrayList<>();
@@ -62,54 +61,45 @@ public class GenerateurPdf {
 
         ByteArrayOutputStream memoire = new ByteArrayOutputStream();
         try (Document doc = new Document(new PdfDocument(new PdfWriter(memoire)), PageSize.A4)) {
-            // titre
             String titre = projet.getTitre() == null || projet.getTitre().isBlank() ? "QR code" : projet.getTitre();
             Paragraph pTitre = new Paragraph(titre)
                     .setFont(policeTitre)
                     .setFontSize(profil.getTailleTitre())
                     .setFontColor(new DeviceRgb(profil.getCouleurTitre()))
                     .setTextAlignment(TextAlignment.CENTER);
-            // police perso : pas de variante grasse, gras simulé
             if (profil.isTitreGras() && profil.getPolice() == PolicePdf.PERSONNALISEE) {
                 pTitre.setBold();
             }
             doc.add(pTitre);
 
-            // images du haut
             for (Image element : imagesHaut) {
                 doc.add(element);
             }
 
-            // QR code
             Image qr = new Image(ImageDataFactory.create(versPng(image)));
             qr.setHorizontalAlignment(HorizontalAlignment.CENTER);
             doc.add(qr);
 
-            // légende
             doc.add(new Paragraph(texte)
                     .setFont(policeTexte)
                     .setFontSize(profil.getTailleTexte())
                     .setFontColor(new DeviceRgb(profil.getCouleurTexte()))
                     .setTextAlignment(TextAlignment.CENTER));
 
-            // images du bas
             for (Image element : imagesBas) {
                 doc.add(element);
             }
         } catch (IOException | RuntimeException e) {
-            // erreurs iText pendant la construction (police sans certains caractères...)
             throw new QrCodeException("Erreur pendant la création du PDF : " + e.getMessage(), e);
         }
 
         try {
             Files.write(fichier.toPath(), memoire.toByteArray());
         } catch (IOException e) {
-            // fichier déjà ouvert, pas les droits...
             throw new QrCodeException("Impossible d'écrire le PDF (fichier ouvert ailleurs ou dossier protégé ?).", e);
         }
     }
 
-    // police standard ou fichier .ttf/.otf intégré au PDF
     private PdfFont creerPolice(ProfilPdf profil, boolean gras) throws QrCodeException {
         PolicePdf police = profil.getPolice();
         try {
@@ -131,7 +121,6 @@ public class GenerateurPdf {
         }
     }
 
-    // fichier image -> élément iText aligné
     private Image creerImage(ImagePdf img) throws QrCodeException {
         File f = img.getFichier();
         if (!f.isFile()) {
@@ -155,7 +144,6 @@ public class GenerateurPdf {
             default:
                 element.setHorizontalAlignment(HorizontalAlignment.CENTER);
         }
-        // taille : % de la largeur utile, proportions gardées, hauteur plafonnée
         float largeur = LARGEUR_UTILE * img.getLargeur() / 100f;
         float hauteur = largeur * element.getImageHeight() / element.getImageWidth();
         if (hauteur > HAUTEUR_IMAGE_MAX) {
@@ -165,7 +153,6 @@ public class GenerateurPdf {
         return element.scaleAbsolute(largeur, hauteur);
     }
 
-    // BufferedImage -> octets PNG pour iText
     private byte[] versPng(BufferedImage image) throws IOException {
         ByteArrayOutputStream sortie = new ByteArrayOutputStream();
         ImageIO.write(image, "png", sortie);

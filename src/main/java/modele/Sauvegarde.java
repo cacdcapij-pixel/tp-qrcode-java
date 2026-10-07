@@ -15,7 +15,6 @@ import com.google.gson.JsonParseException;
  */
 public class Sauvegarde {
 
-    // indenté, apostrophes non échappées : fichier lisible à la main
     private final Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
     /**
@@ -45,7 +44,6 @@ public class Sauvegarde {
         return profil;
     }
 
-    // fichier -> JSON -> objet
     private <T> T lire(File fichier, Class<T> classe) throws QrCodeException {
         try {
             String json = Files.readString(fichier.toPath(), StandardCharsets.UTF_8);
@@ -59,7 +57,6 @@ public class Sauvegarde {
         } catch (IOException e) {
             throw new QrCodeException("Impossible de lire « " + fichier.getName() + " ».", e);
         } catch (JsonParseException e) {
-            // JSON cassé, ou valeur inconnue (ex : type de contenu qui n'existe pas)
             throw new QrCodeException("Le fichier « " + fichier.getName() + " » est abîmé ou n'a pas le bon format.", e);
         }
     }

@@ -22,7 +22,7 @@ public class GenerateurQrCode {
     /** Taille de l'image en pixels (carrée). */
     public static final int TAILLE = 300;
 
-    // au-delà, les modules sont trop clairs sur fond blanc pour être scannés
+    /** Au-delà, le QR est trop clair pour être scanné. */
     private static final int LUMINOSITE_MAX = 150;
 
     /**
@@ -48,7 +48,6 @@ public class GenerateurQrCode {
             throw new QrCodeException("Couleur du QR code trop claire : il ne serait pas lisible. Choisissez une couleur plus foncée.");
         }
 
-        // options : accents, correction d'erreur, marge
         Map<EncodeHintType, Object> options = new EnumMap<>(EncodeHintType.class);
         options.put(EncodeHintType.CHARACTER_SET, "UTF-8");
         options.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
@@ -59,12 +58,10 @@ public class GenerateurQrCode {
             MatrixToImageConfig config = new MatrixToImageConfig(couleur.getRGB(), Color.WHITE.getRGB());
             return MatrixToImageWriter.toBufferedImage(matrice, config);
         } catch (WriterException e) {
-            // ZXing lève ça quand le texte dépasse la capacité max
             throw new QrCodeException("Texte trop long pour un QR code.", e);
         }
     }
 
-    // luminosité perçue 0 (noir) à 255 (blanc)
     private static int luminosite(Color c) {
         return (int) (0.299 * c.getRed() + 0.587 * c.getGreen() + 0.114 * c.getBlue());
     }

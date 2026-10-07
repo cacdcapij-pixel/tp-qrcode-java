@@ -32,12 +32,10 @@ class GestionProfilsTest {
 
     @Test
     void enregistrerListerCharger() throws Exception {
-        // sous-dossier créé au premier enregistrement
         GestionProfils gestion = new GestionProfils(dossier.resolve("profils").toFile());
         gestion.enregistrer(profil("Saint-Luc", Color.BLUE));
         gestion.enregistrer(profil("affiche", Color.RED));
 
-        // tri sans tenir compte des majuscules
         assertEquals(List.of("affiche", "Saint-Luc"), gestion.lister());
         assertTrue(gestion.existe("Saint-Luc"));
         assertEquals(Color.BLUE, gestion.charger("Saint-Luc").getCouleurTitre());
@@ -77,7 +75,6 @@ class GestionProfilsTest {
         assertThrows(QrCodeException.class, () -> gestion.enregistrer(profil("a/b", Color.BLACK)));
         assertThrows(QrCodeException.class, () -> gestion.enregistrer(profil("quoi?", Color.BLACK)));
         assertThrows(QrCodeException.class, () -> gestion.enregistrer(profil("x".repeat(41), Color.BLACK)));
-        // rien n'a été écrit
         assertTrue(gestion.lister().isEmpty());
     }
 

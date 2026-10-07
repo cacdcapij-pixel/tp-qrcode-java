@@ -32,12 +32,10 @@ public class FormateurContenu {
             case TELEPHONE:
                 return formaterTelephone(valeur);
             default:
-                // texte libre gardé tel quel
                 return saisie;
         }
     }
 
-    // ajoute https:// si oublié + vérifie le domaine
     private String formaterLien(String lien) throws QrCodeException {
         String lower = lien.toLowerCase();
         if (!lower.startsWith("http://") && !lower.startsWith("https://")) {
@@ -54,7 +52,6 @@ public class FormateurContenu {
         return lien;
     }
 
-    // mailto:
     private String formaterEmail(String email) throws QrCodeException {
         if (!email.matches(REGEX_EMAIL)) {
             throw new QrCodeException("Adresse email invalide : " + email);
@@ -62,7 +59,6 @@ public class FormateurContenu {
         return "mailto:" + email;
     }
 
-    // tel: sans espaces/points/tirets
     private String formaterTelephone(String tel) throws QrCodeException {
         String numero = tel.replaceAll("[\\s.\\-]", "");
         if (!numero.matches(REGEX_TELEPHONE)) {

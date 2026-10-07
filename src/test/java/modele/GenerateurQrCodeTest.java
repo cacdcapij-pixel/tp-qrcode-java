@@ -17,7 +17,6 @@ class GenerateurQrCodeTest {
 
     private final GenerateurQrCode generateur = new GenerateurQrCode();
 
-    // relit le QR avec ZXing
     private String decoder(BufferedImage image) throws Exception {
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(image)));
         return new MultiFormatReader().decode(bitmap).getText();
@@ -58,13 +57,10 @@ class GenerateurQrCodeTest {
         assertThrows(QrCodeException.class, () -> generateur.generer("a".repeat(5000)));
     }
 
-    // partie 2 : QR en couleur
-
     @Test
     void couleurFonceeLisible() throws Exception {
         BufferedImage image = generateur.generer("https://exemple.fr", new Color(0, 51, 153));
         assertEquals("https://exemple.fr", decoder(image));
-        // coin haut gauche = marge blanche
         assertEquals(Color.WHITE.getRGB(), image.getRGB(0, 0));
     }
 

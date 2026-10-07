@@ -13,10 +13,10 @@ public class ImagePdf {
     private String chemin;
     private EmplacementImage emplacement = EmplacementImage.HAUT;
     private AlignementImage alignement = AlignementImage.CENTRE;
-    // en % de la largeur utile de la page
+    /** En % de la largeur utile de la page. */
     private int largeur = 30;
 
-    // utilisé par Gson à la lecture
+    /** Utilisé par Gson à la lecture. */
     private ImagePdf() {
     }
 
@@ -44,8 +44,6 @@ public class ImagePdf {
             throw new QrCodeException("Projet invalide : largeur d'image " + largeur + " % hors limites.");
         }
     }
-
-    // getters / setters
 
     public File getFichier() {
         return new File(chemin);
@@ -75,7 +73,6 @@ public class ImagePdf {
         this.largeur = largeur;
     }
 
-    // affiché dans la liste des images
     @Override
     public String toString() {
         return getFichier().getName() + "  –  " + emplacement + ", " + alignement.toString().toLowerCase()

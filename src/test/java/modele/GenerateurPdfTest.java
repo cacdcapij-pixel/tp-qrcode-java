@@ -28,7 +28,6 @@ class GenerateurPdfTest {
 
     private final GenerateurPdf generateurPdf = new GenerateurPdf();
 
-    // dossier temporaire supprimé après le test
     @TempDir
     Path dossier;
 
@@ -41,7 +40,6 @@ class GenerateurPdfTest {
 
         assertTrue(fichier.exists());
         assertTrue(fichier.length() > 0);
-        // signature d'un PDF
         byte[] debut = Files.readAllBytes(fichier.toPath());
         assertEquals("%PDF", new String(debut, 0, 4));
     }
@@ -59,9 +57,6 @@ class GenerateurPdfTest {
         assertThrows(QrCodeException.class, () -> generateurPdf.exporter(new Projet(), image, "test", fichier));
     }
 
-    // ---------- partie 2 : style et images ----------
-
-    // petite image PNG de test
     private File creerImage(String nom, int largeur, int hauteur) throws Exception {
         BufferedImage img = new BufferedImage(largeur, hauteur, BufferedImage.TYPE_INT_RGB);
         img.getGraphics().fillRect(0, 0, largeur, hauteur);
@@ -70,7 +65,6 @@ class GenerateurPdfTest {
         return f;
     }
 
-    // nombre d'images dans la 1re page du PDF
     private int compterImages(PdfPage page) {
         return page.getResources().getResourceNames(PdfName.XObject).size();
     }
@@ -98,13 +92,11 @@ class GenerateurPdfTest {
         File fichier = dossier.resolve("style.pdf").toFile();
         generateurPdf.exporter(projet, qr, "https://exemple.fr", fichier);
 
-        // relecture du PDF
         try (PdfDocument pdf = new PdfDocument(new PdfReader(fichier))) {
             PdfPage page = pdf.getFirstPage();
             String texte = PdfTextExtractor.getTextFromPage(page);
             assertTrue(texte.contains("Mon titre perso"));
             assertTrue(texte.contains("https://exemple.fr"));
-            // QR + logo + bandeau
             assertEquals(3, compterImages(page));
         }
     }
@@ -119,7 +111,6 @@ class GenerateurPdfTest {
         QrCodeException e = assertThrows(QrCodeException.class,
                 () -> generateurPdf.exporter(projet, qr, "test", fichier));
         assertTrue(e.getMessage().startsWith("Image introuvable"));
-        // pas de PDF à moitié écrit
         assertFalse(fichier.exists());
     }
 
@@ -158,7 +149,6 @@ class GenerateurPdfTest {
 
     @Test
     void policePersonnaliseeTtf() throws Exception {
-        // police de Windows : test ignoré si elle n'existe pas sur la machine
         File arial = new File("C:/Windows/Fonts/arial.ttf");
         assumeTrue(arial.isFile());
 
@@ -176,7 +166,6 @@ class GenerateurPdfTest {
             String texte = PdfTextExtractor.getTextFromPage(page);
             assertTrue(texte.contains("Élève – police intégrée"));
 
-            // une des polices de la page est Arial
             PdfDictionary polices = page.getResources().getResource(PdfName.Font);
             boolean trouvee = false;
             for (PdfName cle : polices.keySet()) {

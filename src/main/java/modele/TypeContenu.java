@@ -16,7 +16,6 @@ public enum TypeContenu {
         this.libelle = libelle;
     }
 
-    // affiché dans la liste déroulante
     @Override
     public String toString() {
         return libelle;

@@ -9,13 +9,11 @@ class FormateurContenuTest {
 
     private final FormateurContenu formateur = new FormateurContenu();
 
-    // texte
     @Test
     void texteInchange() throws Exception {
         assertEquals("Bonjour BTS SIO", formateur.formater(TypeContenu.TEXTE, "Bonjour BTS SIO"));
     }
 
-    // liens
     @Test
     void lienAvecHttps() throws Exception {
         assertEquals("https://exemple.fr", formateur.formater(TypeContenu.LIEN, "https://exemple.fr"));
@@ -37,7 +35,6 @@ class FormateurContenuTest {
         assertThrows(QrCodeException.class, () -> formateur.formater(TypeContenu.LIEN, "exemple"));
     }
 
-    // email
     @Test
     void emailValide() throws Exception {
         assertEquals("mailto:eleve@saint-luc.fr", formateur.formater(TypeContenu.EMAIL, " eleve@saint-luc.fr "));
@@ -49,7 +46,6 @@ class FormateurContenuTest {
         assertThrows(QrCodeException.class, () -> formateur.formater(TypeContenu.EMAIL, "eleve@"));
     }
 
-    // téléphone
     @Test
     void telephoneNettoye() throws Exception {
         assertEquals("tel:0612345678", formateur.formater(TypeContenu.TELEPHONE, "06 12 34 56 78"));
@@ -62,7 +58,6 @@ class FormateurContenuTest {
         assertThrows(QrCodeException.class, () -> formateur.formater(TypeContenu.TELEPHONE, "12"));
     }
 
-    // cas limites
     @Test
     void saisieVide() {
         assertThrows(QrCodeException.class, () -> formateur.formater(TypeContenu.TEXTE, ""));

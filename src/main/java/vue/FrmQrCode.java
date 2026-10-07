@@ -70,23 +70,16 @@ public class FrmQrCode extends JFrame {
 
     private final Controle controle;
 
-    // fichier du projet ouvert (null si jamais enregistré)
     private File fichierProjet;
-    // dernier dossier utilisé dans les sélecteurs de fichiers
     private File dernierDossier;
-    // vrai quand on remplit les champs par code : on ignore leurs événements
     private boolean majEnCours;
-    // l'aperçu correspond à la saisie actuelle
     private boolean apercuAJour;
-    // export en cours
     private boolean travailEnCours;
 
-    // onglet Contenu
     private JTextField txtTitre;
     private JComboBox<TypeContenu> cboType;
     private JTextArea txtTexte;
 
-    // onglet Style
     private JComboBox<String> cboProfils;
     private JButton btnEnregistrerProfil;
     private JButton btnSupprimerProfil;
@@ -104,7 +97,6 @@ public class FrmQrCode extends JFrame {
     private Color couleurTexte;
     private Color couleurQr;
 
-    // onglet Images
     private final DefaultListModel<ImagePdf> contenuLstImages = new DefaultListModel<>();
     private JList<ImagePdf> lstImages;
     private JButton btnAjouterImage;
@@ -113,7 +105,6 @@ public class FrmQrCode extends JFrame {
     private JComboBox<AlignementImage> cboAlignement;
     private JSpinner spnLargeur;
 
-    // aperçu et boutons
     private JLabel lblApercu;
     private JLabel lblContenu;
     private JButton btnGenerer;
@@ -132,7 +123,6 @@ public class FrmQrCode extends JFrame {
         setLayout(new BorderLayout(10, 10));
         setJMenuBar(creerMenu());
 
-        // onglets
         JTabbedPane onglets = new JTabbedPane();
         onglets.addTab("Contenu", creerOngletContenu());
         onglets.addTab("Style", creerOngletStyle());
@@ -142,11 +132,9 @@ public class FrmQrCode extends JFrame {
         pnlGauche.add(onglets);
         add(pnlGauche, BorderLayout.CENTER);
 
-        // aperçu
         lblApercu = new JLabel("Aucun QR code", SwingConstants.CENTER);
         lblApercu.setPreferredSize(new Dimension(310, 310));
         lblContenu = new JLabel(" ", SwingConstants.CENTER);
-        // largeur fixe : un long contenu est coupé avec « … » au lieu d'élargir la fenêtre
         lblContenu.setPreferredSize(new Dimension(310, lblContenu.getPreferredSize().height));
         JPanel pnlApercu = new JPanel(new BorderLayout());
         pnlApercu.setBorder(BorderFactory.createCompoundBorder(
@@ -155,7 +143,6 @@ public class FrmQrCode extends JFrame {
         pnlApercu.add(lblContenu, BorderLayout.SOUTH);
         add(pnlApercu, BorderLayout.EAST);
 
-        // boutons + barre de progression
         btnGenerer = new JButton("Générer");
         btnExporter = new JButton("Exporter en PDF");
         JPanel pnlBoutons = new JPanel(new FlowLayout());
@@ -171,7 +158,6 @@ public class FrmQrCode extends JFrame {
         pnlBas.add(barProgression, BorderLayout.SOUTH);
         add(pnlBas, BorderLayout.SOUTH);
 
-        // événements
         btnGenerer.addActionListener(e -> btnGenerer_clic());
         btnExporter.addActionListener(e -> btnExporter_clic());
         cboType.addActionListener(e -> saisieModifiee());
@@ -181,7 +167,6 @@ public class FrmQrCode extends JFrame {
             public void changedUpdate(DocumentEvent e) { saisieModifiee(); }
         });
 
-        // style et images de départ
         afficheProfil(new ProfilPdf());
         majChampsImage();
         majBoutons();
@@ -190,8 +175,6 @@ public class FrmQrCode extends JFrame {
         setMinimumSize(getSize());
         setLocationRelativeTo(null);
     }
-
-    // ---------- construction de l'interface ----------
 
     private JMenuBar creerMenu() {
         JMenu mnuFichier = new JMenu("Fichier");
@@ -210,7 +193,6 @@ public class FrmQrCode extends JFrame {
         return barre;
     }
 
-    // élément de menu avec raccourci Ctrl (+ modificateur)
     private JMenuItem itemMenu(String texte, int touche, int modificateur, ActionListener action) {
         JMenuItem item = new JMenuItem(texte);
         item.setAccelerator(KeyStroke.getKeyStroke(touche, InputEvent.CTRL_DOWN_MASK | modificateur));
@@ -224,7 +206,6 @@ public class FrmQrCode extends JFrame {
         txtTexte = new JTextArea(6, 22);
         txtTexte.setLineWrap(true);
         txtTexte.setWrapStyleWord(true);
-        // même police que les autres champs (sinon police machine à écrire)
         txtTexte.setFont(txtTitre.getFont());
 
         JPanel p = formulaire();
@@ -235,15 +216,12 @@ public class FrmQrCode extends JFrame {
     }
 
     private JPanel creerOngletStyle() {
-        // profils
         cboProfils = new JComboBox<>();
-        // largeur fixe, même vide
         cboProfils.setPrototypeDisplayValue("Nom de profil assez long");
         btnEnregistrerProfil = new JButton("Enregistrer…");
         btnSupprimerProfil = new JButton("Supprimer");
         JPanel pnlProfil = rangee(cboProfils, btnEnregistrerProfil, btnSupprimerProfil);
 
-        // police
         cboPolice = new JComboBox<>(PolicePdf.values());
         btnFichierPolice = new JButton("Choisir un fichier…");
         lblFichierPolice = new JLabel(" ");
@@ -268,7 +246,6 @@ public class FrmQrCode extends JFrame {
         ligne(p, 8, "Couleur du QR code :", rangee(btnCouleurQr), false);
         ligne(p, 9, "", new JLabel(), true);
 
-        // événements
         cboProfils.addActionListener(e -> cboProfils_choix());
         btnEnregistrerProfil.addActionListener(e -> btnEnregistrerProfil_clic());
         btnSupprimerProfil.addActionListener(e -> btnSupprimerProfil_clic());
@@ -297,7 +274,6 @@ public class FrmQrCode extends JFrame {
         ligne(p, 3, "Alignement :", rangee(cboAlignement), false);
         ligne(p, 4, "Largeur (% page) :", rangee(spnLargeur), false);
 
-        // événements
         lstImages.addListSelectionListener(e -> majChampsImage());
         btnAjouterImage.addActionListener(e -> btnAjouterImage_clic());
         btnRetirerImage.addActionListener(e -> btnRetirerImage_clic());
@@ -307,14 +283,12 @@ public class FrmQrCode extends JFrame {
         return p;
     }
 
-    // panneau libellé / champ
     private JPanel formulaire() {
         JPanel p = new JPanel(new GridBagLayout());
         p.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         return p;
     }
 
-    // une ligne du formulaire ; etirer = prend la hauteur restante
     private void ligne(JPanel p, int y, String libelle, JComponent champ, boolean etirer) {
         GridBagConstraints c = new GridBagConstraints();
         c.gridy = y;
@@ -329,7 +303,6 @@ public class FrmQrCode extends JFrame {
         p.add(champ, c);
     }
 
-    // composants côte à côte, alignés à gauche
     private JPanel rangee(JComponent... composants) {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         for (JComponent c : composants) {
@@ -338,20 +311,15 @@ public class FrmQrCode extends JFrame {
         return p;
     }
 
-    // ---------- événements : contenu et export ----------
-
-    // saisie changée : l'aperçu ne correspond plus, on bloque l'export
     private void saisieModifiee() {
         apercuAJour = false;
         majBoutons();
     }
 
-    // clic Générer
     private void btnGenerer_clic() {
         controle.demandeFrmQrCodeGenerer((TypeContenu) cboType.getSelectedItem(), txtTexte.getText(), couleurQr);
     }
 
-    // clic Exporter
     private void btnExporter_clic() {
         File fichier = choisirFichier("Enregistrer le PDF", true, "pdf", "Fichier PDF", "qrcode.pdf");
         if (fichier != null) {
@@ -359,16 +327,12 @@ public class FrmQrCode extends JFrame {
         }
     }
 
-    // export possible seulement avec un aperçu à jour et rien en cours
     private void majBoutons() {
         btnGenerer.setEnabled(!travailEnCours);
         btnExporter.setEnabled(apercuAJour && !travailEnCours);
         mnuExporter.setEnabled(btnExporter.isEnabled());
     }
 
-    // ---------- événements : projets ----------
-
-    // menu Ouvrir
     private void mnuOuvrir_clic() {
         File fichier = choisirFichier("Ouvrir un projet", false, EXT_PROJET, "Projet QR code", null);
         if (fichier != null) {
@@ -376,7 +340,6 @@ public class FrmQrCode extends JFrame {
         }
     }
 
-    // menu Enregistrer / Enregistrer sous
     private void mnuEnregistrer_clic(boolean sous) {
         File fichier = fichierProjet;
         if (sous || fichier == null) {
@@ -387,9 +350,6 @@ public class FrmQrCode extends JFrame {
         }
     }
 
-    // ---------- événements : style ----------
-
-    // choix dans la liste des profils
     private void cboProfils_choix() {
         btnSupprimerProfil.setEnabled(cboProfils.getSelectedIndex() > 0);
         if (majEnCours || cboProfils.getSelectedIndex() < 0) {
@@ -399,12 +359,10 @@ public class FrmQrCode extends JFrame {
         controle.demandeFrmQrCodeChargerProfil(nom);
     }
 
-    // clic Enregistrer le profil
     private void btnEnregistrerProfil_clic() {
         String propose = cboProfils.getSelectedIndex() > 0 ? (String) cboProfils.getSelectedItem() : "";
         String nom = (String) JOptionPane.showInputDialog(this, "Nom du profil :", "Enregistrer le profil",
                 JOptionPane.PLAIN_MESSAGE, null, null, propose);
-        // annulé
         if (nom == null) {
             return;
         }
@@ -420,7 +378,6 @@ public class FrmQrCode extends JFrame {
         controle.demandeFrmQrCodeEnregistrerProfil(profil);
     }
 
-    // clic Supprimer le profil
     private void btnSupprimerProfil_clic() {
         String nom = (String) cboProfils.getSelectedItem();
         int rep = JOptionPane.showConfirmDialog(this, "Supprimer le profil « " + nom + " » ?",
@@ -430,14 +387,12 @@ public class FrmQrCode extends JFrame {
         }
     }
 
-    // le bouton fichier ne sert que pour une police personnalisée
     private void majChampsPolice() {
         boolean perso = cboPolice.getSelectedItem() == PolicePdf.PERSONNALISEE;
         btnFichierPolice.setEnabled(perso);
         lblFichierPolice.setText(!perso ? " " : fichierPolice == null ? "Aucun fichier choisi" : fichierPolice.getName());
     }
 
-    // clic Choisir un fichier de police
     private void btnFichierPolice_clic() {
         JFileChooser choix = new JFileChooser(dernierDossier);
         choix.setDialogTitle("Choisir une police");
@@ -449,22 +404,18 @@ public class FrmQrCode extends JFrame {
         }
     }
 
-    // clic sur un bouton de couleur
     private void btnCouleur_clic(JButton bouton) {
         Color actuelle = bouton == btnCouleurTitre ? couleurTitre : bouton == btnCouleurTexte ? couleurTexte : couleurQr;
         Color choisie = JColorChooser.showDialog(this, "Choisir une couleur", actuelle);
-        // annulé
         if (choisie == null) {
             return;
         }
         majCouleur(bouton, choisie);
-        // aperçu refait dans la nouvelle couleur
         if (bouton == btnCouleurQr && apercuAJour) {
             btnGenerer_clic();
         }
     }
 
-    // mémorise la couleur et l'affiche sur le bouton
     private void majCouleur(JButton bouton, Color c) {
         if (bouton == btnCouleurTitre) {
             couleurTitre = c;
@@ -484,9 +435,6 @@ public class FrmQrCode extends JFrame {
         bouton.setText(String.format("#%02X%02X%02X", c.getRed(), c.getGreen(), c.getBlue()));
     }
 
-    // ---------- événements : images ----------
-
-    // clic Ajouter des images
     private void btnAjouterImage_clic() {
         JFileChooser choix = new JFileChooser(dernierDossier);
         choix.setDialogTitle("Ajouter des images");
@@ -502,7 +450,6 @@ public class FrmQrCode extends JFrame {
         lstImages.setSelectedIndex(contenuLstImages.size() - 1);
     }
 
-    // clic Retirer
     private void btnRetirerImage_clic() {
         int indice = lstImages.getSelectedIndex();
         if (indice >= 0) {
@@ -511,7 +458,6 @@ public class FrmQrCode extends JFrame {
         }
     }
 
-    // sélection changée : remplit les réglages de l'image choisie
     private void majChampsImage() {
         ImagePdf image = lstImages.getSelectedValue();
         boolean choisie = image != null;
@@ -528,7 +474,6 @@ public class FrmQrCode extends JFrame {
         }
     }
 
-    // réglage changé : appliqué à l'image choisie
     private void imageModifiee() {
         ImagePdf image = lstImages.getSelectedValue();
         if (majEnCours || image == null) {
@@ -539,8 +484,6 @@ public class FrmQrCode extends JFrame {
         image.setLargeur((Integer) spnLargeur.getValue());
         lstImages.repaint();
     }
-
-    // ---------- lecture des champs ----------
 
     /** Style actuellement réglé dans l'onglet Style. */
     private ProfilPdf lireProfil() {
@@ -570,7 +513,6 @@ public class FrmQrCode extends JFrame {
         return projet;
     }
 
-    // sélecteur de fichier ; enregistrer = ajoute l'extension et demande avant d'écraser
     private File choisirFichier(String titre, boolean enregistrer, String extension, String description, String nomPropose) {
         JFileChooser choix = new JFileChooser(dernierDossier);
         choix.setDialogTitle(titre);
@@ -579,7 +521,6 @@ public class FrmQrCode extends JFrame {
             choix.setSelectedFile(new File(dernierDossier, nomPropose));
         }
         int rep = enregistrer ? choix.showSaveDialog(this) : choix.showOpenDialog(this);
-        // annulé
         if (rep != JFileChooser.APPROVE_OPTION) {
             return null;
         }
@@ -589,11 +530,9 @@ public class FrmQrCode extends JFrame {
             return fichier;
         }
 
-        // ajoute l'extension si oubliée
         if (!fichier.getName().toLowerCase().endsWith("." + extension)) {
             fichier = new File(fichier.getParentFile(), fichier.getName() + "." + extension);
         }
-        // fichier déjà existant
         if (fichier.exists()) {
             int ecraser = JOptionPane.showConfirmDialog(this, "« " + fichier.getName() + " » existe déjà. Le remplacer ?",
                     "Confirmation", JOptionPane.YES_NO_OPTION);
@@ -604,14 +543,11 @@ public class FrmQrCode extends JFrame {
         return fichier;
     }
 
-    // ---------- appelés par le contrôleur ----------
-
     /** Affiche l'aperçu du QR et son contenu, active l'export. */
     public void afficheQrCode(BufferedImage image, String contenu) {
         lblApercu.setText(null);
         lblApercu.setIcon(new ImageIcon(image));
         lblContenu.setText(contenu);
-        // texte complet au survol
         lblContenu.setToolTipText(contenu);
         apercuAJour = true;
         majBoutons();
@@ -650,7 +586,6 @@ public class FrmQrCode extends JFrame {
         }
         majChampsImage();
 
-        // aperçu vidé
         lblApercu.setIcon(null);
         lblApercu.setText("Aucun QR code");
         lblContenu.setText(" ");
@@ -668,7 +603,6 @@ public class FrmQrCode extends JFrame {
         majTitreFenetre();
     }
 
-    // nom du projet dans la barre de titre
     private void majTitreFenetre() {
         setTitle(fichierProjet == null ? TITRE_FENETRE : TITRE_FENETRE + " – " + fichierProjet.getName());
     }
@@ -688,7 +622,6 @@ public class FrmQrCode extends JFrame {
         selectionnerProfil(profil);
         majEnCours = false;
 
-        // la couleur du QR a pu changer
         if (apercuAJour) {
             btnGenerer_clic();
         }
@@ -712,10 +645,7 @@ public class FrmQrCode extends JFrame {
         btnSupprimerProfil.setEnabled(cboProfils.getSelectedIndex() > 0);
     }
 
-    // sélection dans la liste sans recharger : le profil par son nom,
-    // sinon « Par défaut » si c'est le style par défaut, sinon rien (style non enregistré)
     private void selectionnerProfil(ProfilPdf profil) {
-        // liste pas encore remplie (ouverture de la fenêtre)
         if (cboProfils.getItemCount() == 0) {
             return;
         }

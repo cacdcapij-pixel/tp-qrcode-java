@@ -32,15 +32,12 @@ public class Controle {
     private final Sauvegarde sauvegarde = new Sauvegarde();
     private final GestionProfils gestionProfils = new GestionProfils(GestionProfils.dossierParDefaut());
 
-    // contenu du dernier QR généré
     private String contenuCourant;
 
     public static void main(String[] args) {
-        // apparence du système (Windows)
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
-            // on garde l'apparence par défaut
         }
         SwingUtilities.invokeLater(Controle::new);
     }
@@ -50,8 +47,6 @@ public class Controle {
         frmQrCode.majLstProfils(gestionProfils.lister(), null);
         frmQrCode.setVisible(true);
     }
-
-    // ---------- QR code et PDF ----------
 
     /** Clic Générer : formate la saisie, génère le QR dans la couleur du profil et l'affiche. */
     public void demandeFrmQrCodeGenerer(TypeContenu type, String saisie, Color couleurQr) {
@@ -80,13 +75,11 @@ public class Controle {
         new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                // QR refait avec la couleur actuelle du profil
                 BufferedImage image = generateurQrCode.generer(contenu, projet.getProfil().getCouleurQr());
                 generateurPdf.exporter(projet, image, contenu, fichier);
                 return null;
             }
 
-            // retour dans le thread de la fenêtre
             @Override
             protected void done() {
                 frmQrCode.afficheTravail(false);
@@ -94,7 +87,6 @@ public class Controle {
                     get();
                     frmQrCode.afficheExportReussi(fichier);
                 } catch (ExecutionException e) {
-                    // erreur de l'export
                     frmQrCode.afficheErreur(e.getCause().getMessage());
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -102,8 +94,6 @@ public class Controle {
             }
         }.execute();
     }
-
-    // ---------- projets ----------
 
     /** Menu Nouveau : formulaire vide. */
     public void demandeFrmQrCodeNouveauProjet() {
@@ -134,8 +124,6 @@ public class Controle {
             frmQrCode.afficheErreur(e.getMessage());
         }
     }
-
-    // ---------- profils ----------
 
     /** Vrai si un profil porte déjà ce nom (la vue demande alors confirmation). */
     public boolean demandeFrmQrCodeProfilExiste(String nom) {

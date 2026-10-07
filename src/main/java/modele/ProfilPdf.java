@@ -15,7 +15,7 @@ public class ProfilPdf {
 
     private static final String REGEX_COULEUR = "^#[0-9A-Fa-f]{6}$";
 
-    // repère pour reconnaître un fichier de profil
+    /** Repère pour reconnaître un fichier de profil. */
     private String format = "qrcode-profil";
 
     private String nom = "";
@@ -66,7 +66,6 @@ public class ProfilPdf {
     public boolean memeStyle(ProfilPdf autre) {
         return autre != null
                 && police == autre.police
-                // le fichier ne compte que pour une police personnalisée
                 && (police != PolicePdf.PERSONNALISEE || Objects.equals(cheminPolice, autre.cheminPolice))
                 && tailleTitre == autre.tailleTitre
                 && tailleTexte == autre.tailleTexte
@@ -76,12 +75,9 @@ public class ProfilPdf {
                 && couleurQr.equalsIgnoreCase(autre.couleurQr);
     }
 
-    // Color <-> "#RRGGBB"
     private static String versTexte(Color c) {
         return String.format("#%02X%02X%02X", c.getRed(), c.getGreen(), c.getBlue());
     }
-
-    // getters / setters
 
     public String getNom() {
         return nom;
@@ -156,7 +152,6 @@ public class ProfilPdf {
         couleurQr = versTexte(c);
     }
 
-    // affiché dans la liste des profils
     @Override
     public String toString() {
         return nom;

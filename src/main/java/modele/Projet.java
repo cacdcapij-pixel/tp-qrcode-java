@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Projet {
 
-    // repère pour reconnaître un fichier de projet
+    /** Repère pour reconnaître un fichier de projet. */
     private String format = "qrcode-projet";
 
     private String titre = "QR code";
@@ -36,8 +36,6 @@ public class Projet {
             image.valider();
         }
     }
-
-    // getters / setters
 
     public String getTitre() {
         return titre;
